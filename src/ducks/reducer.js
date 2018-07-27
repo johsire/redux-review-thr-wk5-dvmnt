@@ -1,24 +1,37 @@
+
 let initState = {
-  name: ''
+  lists: []
 };
 
 // ACTION TYPES - variables that tell us what to do
-const UPDATE_NAME = 'UPDATE_NAME';
+const ADD_LIST = 'ADD_LIST';
+const DELETE_LIST = 'DELETE_LIST';
 
 export default function reducer(state = initState, action) {
   // HANDLE ACTIONS
   switch(action.type) {
-    case UPDATE_NAME: 
-      return Object.assign({}, state, { name: action.payload });
+    case ADD_LIST: 
+      return Object.assign({}, state, { lists: [...state.lists, action.payload] });
+    case DELETE_LIST:
+      let updatedLists = state.lists.filter(list => list.name !== action.payload);
+      return Object.assign({}, state, { lists: updatedLists  });
     default:
       return state;
   }
-}
+};
 
 // ACTION CREATORS - functions that carry the "payload"
-export function updateName(name) {
+// list will be an object with keys id, title, and items
+export function addList(name) {
   return {
-    type: UPDATE_NAME,
-    payload: name
+    type: ADD_LIST,
+    payload: { name: name, items: [] }
   };
 }
+
+export function deleteList(name) {
+  return {
+    type: DELETE_LIST,
+    payload: name
+  }
+};
